@@ -1,2 +1,2 @@
 @echo off
-python deskpal/__init__.py
+python src/main.py
