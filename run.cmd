@@ -1,2 +1,2 @@
 @echo off
-python main.py
+python deskpal/__main__.py %*

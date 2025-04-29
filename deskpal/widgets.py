@@ -1,4 +1,4 @@
-from . import terminal as tl
+from . import terminal as dt
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -41,14 +41,14 @@ class InlineTextButton(Widget):
         self.call = lambda: None
         self.text = text
         self.bgd = ColorHint(
-            col=tl.bgd(80, 80, 80),
-            col_hover=tl.bgd(0x80, 0xcd, 0xff),
-            col_active=tl.bgd(0xff, 0xff, 0xff)
+            col=dt.bgd(80, 80, 80),
+            col_hover=dt.bgd(0x80, 0xcd, 0xff),
+            col_active=dt.bgd(0xff, 0xff, 0xff)
         )
         self.fgd = ColorHint(
-            col=tl.fgd(0xff, 0xff, 0xff),
-            col_hover=tl.fgd(0xff, 0xff, 0xff),
-            col_active=tl.fgd(0x10, 0x10, 0x10)
+            col=dt.fgd(0xff, 0xff, 0xff),
+            col_hover=dt.fgd(0xff, 0xff, 0xff),
+            col_active=dt.fgd(0x10, 0x10, 0x10)
         )
         self._pressed = False
 
@@ -56,7 +56,7 @@ class InlineTextButton(Widget):
         self.call()
 
     def __str__(self):
-        return f"{tl.move(self.x, self.y)}{self.bgd()}{self.fgd()}{self.text}"
+        return f"{dt.move(self.x, self.y)}{self.bgd()}{self.fgd()}{self.text}"
     
     def _check_bounds(self, x: int, y: int) -> bool:
         return self.x <= x < self.x + self.width and self.y == y
@@ -77,3 +77,42 @@ class InlineTextButton(Widget):
 
     def update(self):
         ...
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Header Bar
+class HeaderBar(Widget):
+    def add_item(self, item: InlineTextButton):
+        item.set_position(self._len_items +1, 0)
+        item.bgd.col = self.bgd
+        item.fgd.col = self.fgd
+        self._items.append(item)
+        self._len_items = sum([len(i.text) +1 for i in self._items])
+
+    
+    def __init__(self, width: int):
+        self.set_position(0, 0)
+        self.set_size(width, 1)
+        self.bgd = dt.bgd(255, 255, 255)
+        self.fgd = dt.fgd(10, 10, 10)
+
+        self._items: list[InlineTextButton] = []
+        self._len_items: int = 0
+
+
+    def __str__(self):
+        s = dt.move(0, 0) + self.bgd + self.fgd + " " * self.width
+        for item in self._items:
+            s += str(item)
+        return s
+    
+
+    def mouse_move(self, x: int, y: int):
+        for item in self._items:
+            item.mouse_move(x, y)
+
+
+    def mouse_button(self, x: int, y: int, button: int, press: bool):
+        for item in self._items:
+            item.mouse_button(x, y, button, press)
+

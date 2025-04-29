@@ -1,23 +1,23 @@
 import os
-from . import terminal as tl
+from . import terminal as dt
 from . import widgets as wg
 
-class DirectoryInterface(tl.Interface):
+class DirectoryInterface(dt.Interface):
     def __init__(self):
         self.widgets: dict[str, wg.Widget] = {
             'button': wg.InlineTextButton(x=1, y=1, text=" Hello! ")
         }
-        self.widgets['button'].call = lambda: print(tl.move(0, 5) + f"hi!", end='')
+        self.widgets['button'].call = lambda: print(dt.move(0, 5) + f"hi!", end='')
 
 
     def resize(self, width: int, height: int):
-        tl.clear_screen()
+        dt.clear_screen()
         for w in self.widgets.values():
             w.draw()
 
     def keyboard(self, key, press, keycode):
         if key == ord('q') and press:
-            tl.stop()
+            dt.stop()
 
         for w in self.widgets.values():
             w.keyboard(key, press, keycode)
@@ -39,7 +39,7 @@ class DirectoryInterface(tl.Interface):
 
 
     def update(self):
-        print(tl.move(0, 0) + f"{os.path.abspath('.')}", end='')
+        print(dt.move(0, 0) + f"{os.path.abspath('.')}", end='')
         for w in self.widgets.values():
             w.update()
             w.draw()
