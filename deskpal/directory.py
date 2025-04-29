@@ -5,7 +5,7 @@ from . import widgets as wg
 class DirectoryInterface(tl.Interface):
     def __init__(self):
         self.widgets: dict[str, wg.Widget] = {
-            'button': wg.InlineTextButton(x=1, y=1, text="Hello!")
+            'button': wg.InlineTextButton(x=1, y=1, text=" Hello! ")
         }
         self.widgets['button'].call = lambda: print(tl.move(0, 5) + f"hi!", end='')
 
