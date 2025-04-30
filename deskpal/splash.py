@@ -5,17 +5,18 @@ from . import (
     terminal as dt,
     widgets as dw
 )
-from .res_loader import load_resource
+from .res_loader import load_resource, load_language
 
 CONFIG: dict = json.loads(load_resource("config.json"))
+LANG = load_language("languages/pt-br.lang")
 
 # Splash screen title
 splash_screen_title = "<TITLE>"
 _hour = datetime.now().hour
 if _hour > 12:
-    splash_screen_title = "Good evening!" if _hour > 17 else "Good afternoon!"
+    splash_screen_title = LANG.get('splash-title-evening') if _hour > 17 else LANG.get('splash-title-afternoon')
 else:
-    splash_screen_title = "Good morning!" if _hour > 4 else "Up late, eh?"
+    splash_screen_title = LANG.get('splash-title-morning') if _hour > 4 else LANG.get('splash-title-night')
 
 
 class SplashScreenInterface(dt.Interface):
@@ -25,9 +26,8 @@ class SplashScreenInterface(dt.Interface):
             'header-bar': dw.HeaderBar(width)
         }
 
-
-        self.widgets['header-bar'].add_item(button_start := dw.InlineTextButton(0, 0, "Start"))
-        self.widgets['header-bar'].add_item(button_help := dw.InlineTextButton(0, 0, "Help"))
+        self.widgets['header-bar'].add_item(button_start := dw.InlineTextButton(0, 0, LANG.get('splash-header-start')))
+        self.widgets['header-bar'].add_item(button_help  := dw.InlineTextButton(0, 0, LANG.get('splash-header-help')))
         button_start.call = lambda: print(dt.move(0, 5) + "S")
         button_help.call = lambda: print(dt.move(0, 5) + "H")
 
@@ -69,3 +69,5 @@ class SplashScreenInterface(dt.Interface):
         for w in self.widgets.values():
             w.update()
             w.draw()
+
+        # print(f"{dt.move(5, 5)}{LANG}")

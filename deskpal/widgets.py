@@ -1,5 +1,5 @@
+from datetime import datetime
 from . import terminal as dt
-
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Classes
@@ -77,6 +77,18 @@ class InlineTextButton(Widget):
 
     def update(self):
         ...
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Misc
+class Clock(Widget):
+    def __init__(self, x: int, y: int, format: str = r"%a, %Y/%m/%%d %H:%M:%S"):
+        self.format = format
+        clockstr = datetime.now().strftime(format)
+        self.set_position(x, y)
+        self.set_size(len(clockstr), 1)
+
+    def __str__(self):
+        return datetime.now().strftime(format)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
